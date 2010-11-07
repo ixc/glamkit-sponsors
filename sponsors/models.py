@@ -1,6 +1,9 @@
 from django.db import models
 from markupfields.fields import SmartlinksTextileField
-# from positions.fields import PositionField
+from django.conf import settings
+import os
+
+UPLOAD_PATH = getattr(settings, 'SPONSORLOGO_UPLOAD_PATH', 'uploads/')
 
 LOGO_SIZE     = (
     (1, 'large'),
@@ -27,7 +30,7 @@ class Sponsor(models.Model):
     blurb = SmartlinksTextileField(blank=True)
     aggregate_type = models.ForeignKey(SponsorshipType, verbose_name="Display on Sponsors' Page as", blank=True, null=True)
     rank = models.IntegerField()
-    logo = models.ImageField(upload_to="images/logos/large/", help_text="png file please")
+    logo = models.ImageField(upload_to=os.path.join(settings.UPLOAD_PATH, "images/%Y/%m/%d/"), help_text="png file please")
     link = models.URLField()
     
     def canonical_logo(self):
