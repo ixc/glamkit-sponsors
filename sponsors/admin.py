@@ -5,6 +5,7 @@ class SponsorAdmin(admin.ModelAdmin):
     list_display = ('name', 'aggregate_type', 'rank')
     prepopulated_fields = {"slug": ("name",),}
     list_editable = ('rank',)
+    ordering = ('name',)
 
 class SponsorshipTypeAdmin(admin.ModelAdmin):
     list_display = ('singular', 'rank')
