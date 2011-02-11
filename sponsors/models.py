@@ -4,6 +4,8 @@ from django.conf import settings
 import os
 
 UPLOAD_PATH = getattr(settings, 'SPONSORLOGO_UPLOAD_PATH', 'uploads/')
+IMAGE_MEDIUM_SCALE = getattr(settings, 'SPONSORLOGO_IMAGE_MEDIUM_SCALE', .9)
+IMAGE_SCALE_SCALE = getattr(settings, 'SPONSORLOGO_IMAGE_SCALE_SCALE', .8)
 
 LOGO_SIZE     = (
     (1, 'large'),
@@ -48,10 +50,10 @@ class Sponsor(models.Model):
         return self.logo.width, self.logo.height
         
     def medium(self):
-        return int(self.logo.width * .9) , int(self.logo.height * .9)
+        return int(self.logo.width * IMAGE_MEDIUM_SCALE) , int(self.logo.height * IMAGE_MEDIUM_SCALE)
 
     def small(self):
-        return int(self.logo.width * .8) , int(self.logo.height * .8)
+        return int(self.logo.width * IMAGE_SCALE_SCALE) , int(self.logo.height * IMAGE_SCALE_SCALE)
         
     def alt_text(self):
         return self.full_name or self.name
