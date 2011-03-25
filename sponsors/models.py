@@ -18,6 +18,7 @@ class SponsorshipType(models.Model):
     plural = models.CharField(max_length=50)
     rank = models.IntegerField()
     logo_size = models.IntegerField(choices=LOGO_SIZE)
+    display_heading = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['rank']
@@ -65,6 +66,8 @@ class SponsorRelationshipBase(models.Model):
     sponsor = models.ForeignKey(Sponsor)
     sponsortype = models.ForeignKey(SponsorshipType, verbose_name="Type")
     annotation = models.CharField(max_length=255, blank=True)
+    special_logo = models.ImageField(upload_to=os.path.join(settings.UPLOAD_PATH, "images/%Y/%m/%d/"), blank=True, help_text="Special logo for this instance only. Will not be resized - png file please")
+    special_link = models.URLField(help_text="A special link for this instance only.", blank=True)
 
     class Meta:
         abstract = True
@@ -72,9 +75,21 @@ class SponsorRelationshipBase(models.Model):
     def __unicode__(self):
         return u"%s - %s" % (self.sponsortype, self.sponsor)
 
+    def link(self):
+        return self.special_link or self.sponsor.link
+        
+    def alt_text(self):
+        return self.sponsor.alt_text
+            
+    def logo(self):
+        return self.special_logo or self.sponsor.logo
+
     def logosize(self):
-        return {
-            1: self.sponsor.large(),
-            2: self.sponsor.medium(),
-            3: self.sponsor.small(),
-        }[self.sponsortype.logo_size]
+        if self.special_logo:
+            return (self.special_logo.width, self.special_logo.height)
+        else:
+            return {
+                1: self.sponsor.large(),
+                2: self.sponsor.medium(),
+                3: self.sponsor.small(),
+            }[self.sponsortype.logo_size]
