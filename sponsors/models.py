@@ -79,7 +79,7 @@ class SponsorRelationshipBase(models.Model):
         return self.special_link or self.sponsor.link
         
     def alt_text(self):
-        return self.sponsor.alt_text
+        return self.sponsor.alt_text()
             
     def logo(self):
         return self.special_logo or self.sponsor.logo
