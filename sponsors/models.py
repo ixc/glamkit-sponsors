@@ -63,8 +63,8 @@ class Sponsor(models.Model):
         ordering = ['aggregate_type__rank', 'rank']
 
 class SponsorRelationshipBase(models.Model):
-    sponsor = models.ForeignKey(Sponsor)
-    sponsortype = models.ForeignKey(SponsorshipType, verbose_name="Type")
+    sponsor = models.ForeignKey(Sponsor, related_name="%(app_label)s_%(class)s_related")
+    sponsortype = models.ForeignKey(SponsorshipType, verbose_name="Type", related_name="%(app_label)s_%(class)s_related")
     annotation = models.CharField(max_length=255, blank=True)
     special_logo = models.ImageField(upload_to=os.path.join(settings.UPLOAD_PATH, "images/%Y/%m/%d/"), blank=True, help_text="Special logo for this instance only. Will not be resized - png file please")
     special_link = models.URLField(help_text="A special link for this instance only.", blank=True)
